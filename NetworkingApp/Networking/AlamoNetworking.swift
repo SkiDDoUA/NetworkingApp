@@ -22,8 +22,8 @@ class AlamoNetworking<T: Endpoint> {
         self.headers = headers
     }
     
-    func perform(_ method: HTTPMethod, _ endpoint: T, _ parameters: NetworkRequestBodyConvertible, completion: @escaping (Result) -> ()) {
-        AF.request(host + "/\(endpoint.pathComponent)", method: method, parameters: parameters.parameters, headers: HTTPHeaders(headers))
+    func perform(_ method: HTTPMethod, _ endpoint: T, _ parameters: NetworkRequestBodyConvertible, path: String, completion: @escaping (Result) -> ()) {
+        AF.request(host + "/\(path)", method: method, parameters: parameters.parameters, headers: HTTPHeaders(headers))
             .response { response in
                 if let error = response.error {
                     completion(.error(error))
@@ -33,9 +33,14 @@ class AlamoNetworking<T: Endpoint> {
             }
     }
     
-    func perform(_ method: HTTPMethod, _ endpoint: T, _ parameters: NetworkRequestBodyConvertible) async throws -> Data? {
+    func performAwait(_ method: HTTPMethod, _ endpoint: T, _ parameters: NetworkRequestBodyConvertible, recipeID: String? = nil) async throws -> Data? {
+        var requestPath = endpoint.details.pathComponent
+        if let recipeID {
+            requestPath += "\(recipeID)/information"
+        }
+        
         return try await withCheckedThrowingContinuation { continuation in
-            perform(method, endpoint, parameters) { result in
+            perform(method, endpoint, parameters, path: requestPath) { result in
                 switch result {
                 case .data(let data):
                     continuation.resume(returning: data)
@@ -44,8 +49,6 @@ class AlamoNetworking<T: Endpoint> {
                 }
             }
         }
-        
-
     }
     
 }

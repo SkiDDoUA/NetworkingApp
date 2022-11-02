@@ -13,31 +13,62 @@ protocol NetworkRequestBodyConvertible {
     var parameters: [String : Any]? { get }
 }
 
-struct RecipeAnalyzelnstruction: NetworkRequestBodyConvertible {
-    var text: String
+struct RecipesQuery: NetworkRequestBodyConvertible {
+    var text: String?
+    var parameter: RecipesEndpoint
     
-    init(_ text: String) {
+    init(_ text: String, _ parameter: RecipesEndpoint) {
         self.text = text
+        self.parameter = parameter
     }
     
     var data: Data? {
-        "instructions=\(text)".data(using: .utf8)
+        "\(parameter.details.parameter)=\(text)".data(using: .utf8)
     }
     
     var queryItems: [URLQueryItem]? { nil }
     var parameters: [String : Any]? {
-        ["instructions" : text]
+        ["\(parameter.details.parameter)" : text]
     }
 }
 
+struct NetworkSettings {
+    static var headers = [
+        "content-type": "application/x-www-form-urlencoded",
+        "X-RapidAPI-Key": "4e63d4faa0msh378a71badc41377p1acfa1jsnee0352aaf9dc",
+        "X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com"
+    ]
+    
+    static var networkService = AlamoNetworking<RecipesEndpoint>("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com", headers: headers)
+}
+
 protocol Endpoint {
-    var pathComponent: String { get }
+    var details: (pathComponent: String, parameter: String) { get }
 }
 
 enum RecipesEndpoint: String, Endpoint {
-    case analyzer = "recipes/analyzeInstructions"
-    var pathComponent: String {
-        rawValue
+    case analyzer
+    case recipes
+    case recipeInformation
+    case nutrition
+    case cuisine
+    case random
+    
+    var details: (pathComponent: String, parameter: String) {
+        switch self {
+        case .analyzer:
+            return (pathComponent: "recipes/analyzeInstructions", parameter: "instructions")
+        case .recipes:
+            return (pathComponent: "recipes/complexSearch", parameter: "query")
+        case .recipeInformation:
+            return (pathComponent: "recipes/", parameter: "id")
+        case .nutrition:
+            return (pathComponent: "recipes/guessNutrition", parameter: "title")
+        case .cuisine:
+            return (pathComponent: "recipes/cuisine", parameter: "ingredientList")
+        case .random:
+            return (pathComponent: "recipes/random", parameter: "number")
+        }
     }
 }
 
@@ -76,7 +107,7 @@ final class Network<T: Endpoint> {
     }
     
     private func makeRequest(_ method: Method, _ endpoint: T, _ parameters: NetworkRequestBodyConvertible?) -> URLRequest {
-        var request = URLRequest(url: host.appending(path: endpoint.pathComponent))
+        var request = URLRequest(url: host.appending(path: endpoint.details.pathComponent))
         request.httpMethod = method.rawValue
         request.allHTTPHeaderFields = headers
         

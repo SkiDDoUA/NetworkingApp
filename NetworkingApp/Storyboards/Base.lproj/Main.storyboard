@@ -10,16 +10,16 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Main View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="NetworkingApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="MainViewController" customModule="NetworkingApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="13" translatesAutoresizingMaskIntoConstraints="NO" id="Hky-kV-7b7">
-                                <rect key="frame" x="26" y="47" width="338" height="763"/>
+                                <rect key="frame" x="26" y="73" width="338" height="737"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="26" translatesAutoresizingMaskIntoConstraints="NO" id="fG6-hf-5GQ">
                                         <rect key="frame" x="0.0" y="0.0" width="338" height="116.33333333333333"/>
@@ -29,6 +29,7 @@
                                                 <subviews>
                                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search or Guess" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lKM-tJ-S8H">
                                                         <rect key="frame" x="0.0" y="0.0" width="221" height="52"/>
+                                                        <color key="tintColor" name="Dark Gray"/>
                                                         <color key="textColor" name="Black"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits"/>
@@ -41,6 +42,9 @@
                                                                 <color key="backgroundColor" name="Orange"/>
                                                                 <state key="normal" title="Button"/>
                                                                 <buttonConfiguration key="configuration" style="plain" image="Search"/>
+                                                                <connections>
+                                                                    <action selector="searchButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="c8n-v1-fcr"/>
+                                                                </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Rr-OT-9g1">
                                                                 <rect key="frame" x="52" y="0.0" width="52" height="52"/>
@@ -57,6 +61,9 @@
                                                                         </fragment>
                                                                     </attributedString>
                                                                 </buttonConfiguration>
+                                                                <connections>
+                                                                    <action selector="guessButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VCo-VQ-lnX"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <constraints>
@@ -77,7 +84,7 @@
                                         </subviews>
                                     </stackView>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Ocl-Dh-fwq">
-                                        <rect key="frame" x="0.0" y="129.33333333333331" width="338" height="633.66666666666674"/>
+                                        <rect key="frame" x="0.0" y="129.33333333333331" width="338" height="607.66666666666674"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ywm-nZ-Jcw">
                                             <size key="itemSize" width="156" height="182"/>
@@ -86,15 +93,20 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="zFf-CX-cXd">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RecipeCollectionViewCell" id="zFf-CX-cXd" customClass="RecipeCollectionViewCell" customModule="NetworkingApp" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="156" height="182"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="wXB-B4-wu0">
                                                     <rect key="frame" x="0.0" y="0.0" width="156" height="182"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PTE-af-nTC">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PTE-af-nTC">
                                                             <rect key="frame" x="0.0" y="0.0" width="156" height="182"/>
+                                                            <color key="backgroundColor" name="Dark Gray"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="156" id="3cU-hg-XrZ"/>
+                                                                <constraint firstAttribute="height" constant="182" id="fpz-QH-PxR"/>
+                                                            </constraints>
                                                         </imageView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="BC1-oV-qmZ">
                                                             <rect key="frame" x="13" y="135" width="130" height="34"/>
@@ -139,7 +151,9 @@
                                                     </constraints>
                                                 </collectionViewCellContentView>
                                                 <connections>
-                                                    <segue destination="ECD-Db-lD9" kind="show" id="PVg-cT-0pa"/>
+                                                    <outlet property="imageView" destination="PTE-af-nTC" id="tdX-3e-OfP"/>
+                                                    <outlet property="timeLabel" destination="499-hb-YAu" id="TbZ-Cn-0DT"/>
+                                                    <outlet property="titleLabel" destination="j90-Xw-h5j" id="UGt-Om-6I5"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
@@ -158,27 +172,33 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Hky-kV-7b7" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="MV3-f6-XiZ"/>
+                            <constraint firstItem="Hky-kV-7b7" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="26" id="MV3-f6-XiZ"/>
                             <constraint firstItem="Hky-kV-7b7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="26" id="XKh-cW-Mkk"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Hky-kV-7b7" secondAttribute="bottom" id="otF-aZ-62T"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Hky-kV-7b7" secondAttribute="trailing" constant="26" id="uHR-Pl-Q4r"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="RecipesCollectionView" destination="Ocl-Dh-fwq" id="WhJ-iX-ECs"/>
+                        <outlet property="searchTextField" destination="lKM-tJ-S8H" id="Jb9-dZ-CzJ"/>
+                        <segue destination="ECD-Db-lD9" kind="show" identifier="toRecipe" id="2gX-cm-Bbh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="65" y="-4"/>
         </scene>
-        <!--View Controller-->
+        <!--Recipe View Controller-->
         <scene sceneID="Ejm-th-53a">
             <objects>
-                <viewController id="ECD-Db-lD9" sceneMemberID="viewController">
+                <viewController id="ECD-Db-lD9" customClass="RecipeViewController" customModule="NetworkingApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ngg-rz-zX6">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="787"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GQx-nk-RkN">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GQx-nk-RkN">
                                 <rect key="frame" x="0.0" y="47" width="390" height="455"/>
+                                <color key="backgroundColor" name="Dark Gray"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="455" id="69O-MZ-xKz"/>
                                 </constraints>
@@ -213,6 +233,7 @@
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="WQi-VM-6Ch"/>
+                                                    <constraint firstAttribute="trailing" secondItem="1cl-C0-T1j" secondAttribute="trailing" id="op3-ep-C3Z"/>
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="rEQ-ZS-7bv">
@@ -246,11 +267,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="l6B-19-ccO">
-                                <rect key="frame" x="-6" y="625" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="7g9-z2-KK5"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -264,6 +280,12 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="omD-Ya-Fhb"/>
+                    <connections>
+                        <outlet property="cookingTimeLabel" destination="1cl-C0-T1j" id="Hy8-wf-83V"/>
+                        <outlet property="cuisineLabel" destination="xT3-SN-vJ5" id="2sZ-UP-Bhc"/>
+                        <outlet property="recipeImageView" destination="GQx-nk-RkN" id="pE1-iK-qBg"/>
+                        <outlet property="titleLabel" destination="oNp-az-ua5" id="j18-o3-mi4"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KaG-Ur-js5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -279,16 +301,16 @@
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Dark Gray">
-            <color red="0.44808346030000001" green="0.44808346030000001" blue="0.44808346030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.44800001382827759" green="0.44800001382827759" blue="0.44800001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Green">
-            <color red="0.0" green="0.70045977829999995" blue="0.20114523170000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.69999998807907104" blue="0.20100000500679016" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Orange">
-            <color red="0.99364119770000003" green="0.4274258018" blue="0.044986836609999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.99400001764297485" green="0.42699998617172241" blue="0.045000001788139343" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="White">
-            <color red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
