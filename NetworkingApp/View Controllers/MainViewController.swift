@@ -76,14 +76,19 @@ class MainViewController: UIViewController {
             completion(recipeForSegue)
         }
     }
-    
+        
     //MARK: - Parse Cell Data To RecipeViewController
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-        if let destination = segue.destination as? RecipeViewController,
-           let recipe = sender as? RecipeElement {
-            print(recipe.id)
-            destination.configure(for: recipe)
+        switch segue.identifier {
+        case "toRecipe":
+            let destination = segue.destination as! RecipeViewController
+            let cell = sender as! RecipeCollectionViewCell
+            let indexPath = RecipesCollectionView.indexPath(for: cell)!
+            
+            getRecipeInformation(for: recipes[indexPath.item].id) { recipe in
+                destination.configure(for: recipe)
+            }
+        default: break
         }
     }
 }
@@ -105,13 +110,6 @@ extension MainViewController: UICollectionViewDataSource {
         let cell = RecipesCollectionView.dequeueReusableCell(withReuseIdentifier: RecipeCollectionViewCell.reuseIdentifier, for: indexPath) as! RecipeCollectionViewCell
         cell.configure(for: recipes[indexPath.row])
         return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        getRecipeInformation(for: recipes[indexPath.item].id) { recipe in
-            print(recipe.id)
-            self.performSegue(withIdentifier: "toRecipe", sender: recipe)
-        }
     }
 }
 

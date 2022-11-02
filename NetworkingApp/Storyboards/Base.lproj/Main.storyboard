@@ -154,6 +154,7 @@
                                                     <outlet property="imageView" destination="PTE-af-nTC" id="tdX-3e-OfP"/>
                                                     <outlet property="timeLabel" destination="499-hb-YAu" id="TbZ-Cn-0DT"/>
                                                     <outlet property="titleLabel" destination="j90-Xw-h5j" id="UGt-Om-6I5"/>
+                                                    <segue destination="ECD-Db-lD9" kind="show" identifier="toRecipe" id="O51-5r-tmH"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
@@ -181,7 +182,6 @@
                     <connections>
                         <outlet property="RecipesCollectionView" destination="Ocl-Dh-fwq" id="WhJ-iX-ECs"/>
                         <outlet property="searchTextField" destination="lKM-tJ-S8H" id="Jb9-dZ-CzJ"/>
-                        <segue destination="ECD-Db-lD9" kind="show" identifier="toRecipe" id="2gX-cm-Bbh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
