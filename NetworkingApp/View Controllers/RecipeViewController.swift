@@ -13,6 +13,11 @@ class RecipeViewController: UIViewController {
     @IBOutlet private weak var cuisineLabel: UILabel!
     @IBOutlet private weak var recipeImageView: UIImageView!
     @IBOutlet private weak var IngredientsCollectionView: UICollectionView!
+    @IBOutlet private weak var scrollView: UIScrollView!
+    
+    @IBOutlet private weak var ScrollHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var IngredientsCollectionViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var StackViewHeightConstraint: NSLayoutConstraint!
     
     var recipe: RecipeElement! {
         didSet {
@@ -25,7 +30,13 @@ class RecipeViewController: UIViewController {
         
         IngredientsCollectionView.delegate = self
         IngredientsCollectionView.dataSource = self
-//        IngredientsCollectionView.register(IngredientCollectionViewCell.self, forCellWithReuseIdentifier: IngredientCollectionViewCell.reuseIdentifier)
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.updateViewConstraints()
+        IngredientsCollectionViewHeightConstraint?.constant = IngredientsCollectionView.contentSize.height
+        StackViewHeightConstraint?.constant = IngredientsCollectionView.contentSize.height + 37
+        scrollView.resizeScrollViewContentSize()
     }
     
     func configure(for recipe: RecipeElement) {
@@ -59,5 +70,16 @@ extension RecipeViewController: UICollectionViewDataSource {
         let cell = IngredientsCollectionView.dequeueReusableCell(withReuseIdentifier: IngredientCollectionViewCell.reuseIdentifier, for: indexPath) as! IngredientCollectionViewCell
         cell.configure(for: recipe.extendedIngredients[indexPath.row])
         return cell
+    }
+}
+
+
+extension UIScrollView {
+    func resizeScrollViewContentSize() {
+        var contentRect = CGRect.zero
+        for view in self.subviews {
+            contentRect = contentRect.union(view.frame)
+        }
+        self.contentSize = contentRect.size
     }
 }
