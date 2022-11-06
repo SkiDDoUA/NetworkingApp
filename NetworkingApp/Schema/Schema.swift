@@ -47,7 +47,7 @@ struct Recipe: Codable {
             "Calories: \(calories.value) \(calories.unit)\n" +
             "Fat: \(fat.value) \(fat.unit)\n" +
             "Protein: \(protein.value) \(protein.unit)\n" +
-            "Carbs: \(carbs.value) \(carbs.unit)\n"
+            "Carbs: \(carbs.value) \(carbs.unit)"
     }
 }
 

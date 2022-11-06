@@ -9,14 +9,16 @@ import UIKit
 import Kingfisher
 
 class RecipeCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var timeLabel: UILabel!
     
     func configure(for recipe: Result) {
         DispatchQueue.main.async {
             self.titleLabel.text = recipe.title
             self.imageView.kf.setImage(with: URL(string: recipe.image))
+            
+            self.layer.cornerRadius = 12
         }
     }
 }

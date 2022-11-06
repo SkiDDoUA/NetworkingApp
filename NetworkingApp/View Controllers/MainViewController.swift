@@ -10,6 +10,8 @@ import Alamofire
 
 class MainViewController: UIViewController {
     @IBOutlet private weak var RecipesCollectionView: UICollectionView!
+    @IBOutlet private weak var searchButton: UIButton!
+    @IBOutlet private weak var guessButton: UIButton!
     @IBOutlet private weak var searchTextField: UITextField!
     
     var recipes = [Result]() {
@@ -24,7 +26,25 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         RecipesCollectionView.delegate = self
         RecipesCollectionView.dataSource = self
+        
+        setupUI()
+        
         getRecipes(for: "sandwich")
+    }
+    
+    func setupUI() {
+        let radius = CGFloat(12)
+        
+        searchButton.layer.cornerRadius = radius
+        searchButton.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        
+        guessButton.layer.cornerRadius = radius
+        guessButton.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+        
+        searchTextField.layer.cornerRadius = radius
+        searchTextField.layer.borderColor = UIColor(named: "Gray")?.cgColor
+        searchTextField.layer.borderWidth = 1.5
+        searchTextField.clipsToBounds = true
     }
     
     @IBAction func searchButtonTapped(_ sender: Any) {
