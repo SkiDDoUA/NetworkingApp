@@ -24,7 +24,6 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         RecipesCollectionView.delegate = self
         RecipesCollectionView.dataSource = self
-//        guessNutrition(for: "Spaghetti Aglio et Olio")
         getRecipes(for: "sandwich")
     }
     
@@ -36,7 +35,7 @@ class MainViewController: UIViewController {
     
     @IBAction func guessButtonTapped(_ sender: Any) {
         if let request = searchTextField.text {
-            getRecipes(for: request)
+            guessNutrition(for: request)
         }
     }
     
@@ -48,25 +47,18 @@ class MainViewController: UIViewController {
         }
     }
     
-//    func guessNutrition(for text: String) {
-//        Task {
-//            let data = try? await NetworkSettings.networkService.performAwait(.get, .nutrition, RecipesQuery(text, .nutrition))
-//            let ss = try JSONSerialization.jsonObject(with: data!)
-//            let recipeList = try Nutrition(dictionary: ss as! [String : Any])
-////            let recipesList = try! JSONDecoder().decode(Nutrition.self, from: data!)
-////            print(recipesList)
-////            print(try JSONSerialization.jsonObject(with: data!))
-//
-////            let dataDictionary = try JSONSerialization.jsonObject(with: data!) as? [String: Any]
-////            print(dataDictionary!)
-//            //            let recipesList = try! JSONDecoder().decode(RecipesList.self, from: data!)
-//            //            recipes = recipesList.results
-//        }
-//    }
+    func guessNutrition(for text: String) {
+        Task {
+            let data = try? await NetworkSettings.networkService.performAwait(.get, .nutrition, RecipesQuery(text, .nutrition))
+            let recipeNutrition = try! JSONDecoder().decode(Recipe.self, from: data!)
+            
+            showAlert(dish: text, text: recipeNutrition.description)
+        }
+    }
     
     func getRecipeInformation(for id: Int, completion: @escaping (RecipeElement) -> ()) {
         Task {
-            let dataInformation = try? await NetworkSettings.networkService.performAwait(.get, .recipeInformation, RecipesQuery(String(id), .recipeInformation), recipeID: String(id))
+            let dataInformation = try? await NetworkSettings.networkService.performAwait(.get, .recipeInformation(id: id), RecipesQuery(String(id), .recipeInformation(id: id)))
             var recipeForSegue = try! JSONDecoder().decode(RecipeElement.self, from: dataInformation!)
             
             let dataCuisine = try? await NetworkSettings.networkService.performAwait(.post, .cuisine, RecipesQuery(recipeForSegue.title, .cuisine))
@@ -75,6 +67,12 @@ class MainViewController: UIViewController {
             recipeForSegue.cuisine = cuisine?["cuisine"] as? String
             completion(recipeForSegue)
         }
+    }
+    
+    func showAlert(dish: String, text: String) {
+        let alert = UIAlertController(title: "Nutririon for: \(dish)", message: text, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Nice!", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
         
     //MARK: - Parse Cell Data To RecipeViewController

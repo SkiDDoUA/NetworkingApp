@@ -38,33 +38,21 @@ struct ExtendedIngredient: Codable {
     let name: String
 }
 
-//struct Nutrition: Decodable {
-//    let calories: [String: Any]
-//    let carbs: [String: Any]
-//    let fat: [String: Any]
-//    let protein: [String: Any]
-//}
+// MARK: - Recipe
+struct Recipe: Codable {
+    let calories, fat, protein, carbs: Calories
+    
+    var description: String {
+        return
+            "Calories: \(calories.value) \(calories.unit)\n" +
+            "Fat: \(fat.value) \(fat.unit)\n" +
+            "Protein: \(protein.value) \(protein.unit)\n" +
+            "Carbs: \(carbs.value) \(carbs.unit)\n"
+    }
+}
 
-
-//struct Nutrition {
-//    let calories: Int
-////    let carbs: Int
-////    let fat: Int
-////    let protein: Int
-//    
-//    init(json: [String: Any]) {
-//        self.calories = json["calories"]["value"]
-////        self.carbs = dictionary["jobName"] as? String ?? ""
-////        self.fat = dictionary["jobName"] as? String ?? ""
-////        self.protein = dictionary["jobName"] as? String ?? ""
-//    }
-//}
-
-//extension Encodable {
-//    var toDictionary: [String : Any]? {
-//        guard let data =  try? JSONEncoder().encode(self) else {
-//            return nil
-//        }
-//        return try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-//    }
-//}
+// MARK: - Calories
+struct Calories: Codable {
+    let value: Int
+    let unit: String
+}

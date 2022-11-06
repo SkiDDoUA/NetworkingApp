@@ -14,7 +14,7 @@ protocol NetworkRequestBodyConvertible {
 }
 
 struct RecipesQuery: NetworkRequestBodyConvertible {
-    var text: String?
+    var text: String
     var parameter: RecipesEndpoint
     
     init(_ text: String, _ parameter: RecipesEndpoint) {
@@ -35,7 +35,7 @@ struct RecipesQuery: NetworkRequestBodyConvertible {
 struct NetworkSettings {
     static var headers = [
         "content-type": "application/x-www-form-urlencoded",
-        "X-RapidAPI-Key": "4e63d4faa0msh378a71badc41377p1acfa1jsnee0352aaf9dc",
+        "X-RapidAPI-Key": "59ca79f22emshfb362fb4da9a242p18e413jsn177512184626",
         "X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com"
     ]
     
@@ -46,10 +46,10 @@ protocol Endpoint {
     var details: (pathComponent: String, parameter: String) { get }
 }
 
-enum RecipesEndpoint: String, Endpoint {
+enum RecipesEndpoint: Endpoint {
     case analyzer
     case recipes
-    case recipeInformation
+    case recipeInformation(id: Int)
     case nutrition
     case cuisine
     case random
@@ -60,8 +60,8 @@ enum RecipesEndpoint: String, Endpoint {
             return (pathComponent: "recipes/analyzeInstructions", parameter: "instructions")
         case .recipes:
             return (pathComponent: "recipes/complexSearch", parameter: "query")
-        case .recipeInformation:
-            return (pathComponent: "recipes/", parameter: "id")
+        case .recipeInformation(let id):
+            return (pathComponent: "recipes/\(id)/information", parameter: "id")
         case .nutrition:
             return (pathComponent: "recipes/guessNutrition", parameter: "title")
         case .cuisine:
