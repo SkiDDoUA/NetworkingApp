@@ -59,35 +59,67 @@ class MainViewController: UIViewController {
         }
     }
     
+    //MARK: - Alamofire Networking Functions
     func getRecipes(for text: String) {
         Task {
-            let data = try? await NetworkSettings.networkService.performAwait(.get, .recipes, RecipesQuery(text, .recipes))
+            let data = try? await NetworkSettings.networkServiceAlamofire.performAwaitAlamofire(.get, .recipes, RecipesQuery(text, .recipes))
             let recipesList = try! JSONDecoder().decode(RecipesList.self, from: data!)
             recipes = recipesList.results
         }
     }
-    
+
     func guessNutrition(for text: String) {
         Task {
-            let data = try? await NetworkSettings.networkService.performAwait(.get, .nutrition, RecipesQuery(text, .nutrition))
-            let recipeNutrition = try! JSONDecoder().decode(Recipe.self, from: data!)
-            
-            showAlert(dish: text, text: recipeNutrition.description)
+            let data = try? await NetworkSettings.networkServiceAlamofire.performAwaitAlamofire(.get, .nutrition, RecipesQuery(text, .nutrition))
+            let dishNutrition = try! JSONDecoder().decode(DishNutrition.self, from: data!)
+
+            showAlert(dish: text, text: dishNutrition.description)
         }
     }
-    
-    func getRecipeInformation(for id: Int, completion: @escaping (RecipeElement) -> ()) {
+
+    func getRecipeInformation(for id: Int, completion: @escaping (Recipe) -> ()) {
         Task {
-            let dataInformation = try? await NetworkSettings.networkService.performAwait(.get, .recipeInformation(id: id), RecipesQuery(String(id), .recipeInformation(id: id)))
-            var recipeForSegue = try! JSONDecoder().decode(RecipeElement.self, from: dataInformation!)
-            
-            let dataCuisine = try? await NetworkSettings.networkService.performAwait(.post, .cuisine, RecipesQuery(recipeForSegue.title, .cuisine))
+            let dataInformation = try? await NetworkSettings.networkServiceAlamofire.performAwaitAlamofire(.get, .recipeInformation(id: id), RecipesQuery(String(id), .recipeInformation(id: id)))
+            var recipeForSegue = try! JSONDecoder().decode(Recipe.self, from: dataInformation!)
+
+            let dataCuisine = try? await NetworkSettings.networkServiceAlamofire.performAwaitAlamofire(.post, .cuisine, RecipesQuery(recipeForSegue.title, .cuisine))
             let cuisine = try! JSONSerialization.jsonObject (with: dataCuisine!) as? [String: Any]
 
             recipeForSegue.cuisine = cuisine?["cuisine"] as? String
             completion(recipeForSegue)
         }
     }
+    
+    //MARK: - Networking Functions
+//    func getRecipes(for text: String) {
+//        Task {
+//            let data = try? await NetworkSettings.networkService.performAwait(.get, .recipes, RecipesQuery(text, .recipes))
+//            let recipesList = try! JSONDecoder().decode(RecipesList.self, from: data!)
+//            recipes = recipesList.results
+//        }
+//    }
+//
+//    func guessNutrition(for text: String) {
+//        Task {
+//            let data = try? await NetworkSettings.networkService.performAwait(.get, .nutrition, RecipesQuery(text, .nutrition))
+//            let recipeNutrition = try! JSONDecoder().decode(DishNutrition.self, from: data!)
+//
+//            showAlert(dish: text, text: recipeNutrition.description)
+//        }
+//    }
+//
+//    func getRecipeInformation(for id: Int, completion: @escaping (Recipe) -> ()) {
+//        Task {
+//            let dataInformation = try? await NetworkSettings.networkService.performAwait(.get, .recipeInformation(id: id), RecipesQuery(String(id), .recipeInformation(id: id)))
+//            var recipeForSegue = try! JSONDecoder().decode(Recipe.self, from: dataInformation!)
+//
+//            let dataCuisine = try? await NetworkSettings.networkService.performAwait(.post, .cuisine, RecipesQuery(recipeForSegue.title, .cuisine))
+//            let cuisine = try! JSONSerialization.jsonObject (with: dataCuisine!) as? [String: Any]
+//
+//            recipeForSegue.cuisine = cuisine?["cuisine"] as? String
+//            completion(recipeForSegue)
+//        }
+//    }
     
     func showAlert(dish: String, text: String) {
         let alert = UIAlertController(title: "Nutririon for: \(dish)", message: text, preferredStyle: UIAlertController.Style.alert)
@@ -98,7 +130,7 @@ class MainViewController: UIViewController {
     //MARK: - Parse Cell Data To RecipeViewController
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
-        case "toRecipe":
+        case SegueIdentifier.toRecipe:
             let destination = segue.destination as! RecipeViewController
             let cell = sender as! RecipeCollectionViewCell
             let indexPath = RecipesCollectionView.indexPath(for: cell)!
@@ -128,11 +160,5 @@ extension MainViewController: UICollectionViewDataSource {
         let cell = RecipesCollectionView.dequeueReusableCell(withReuseIdentifier: RecipeCollectionViewCell.reuseIdentifier, for: indexPath) as! RecipeCollectionViewCell
         cell.configure(for: recipes[indexPath.row])
         return cell
-    }
-}
-
-extension UICollectionReusableView {
-    static var reuseIdentifier: String {
-        return String(describing: Self.self)
     }
 }

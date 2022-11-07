@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-class AlamoNetworking<T: Endpoint> {
+final class AlamoNetworking<T: Endpoint> {
     enum Result {
         case data(Data?)
         case error(Error)
@@ -23,10 +23,6 @@ class AlamoNetworking<T: Endpoint> {
     }
     
     func perform(_ method: HTTPMethod, _ endpoint: T, _ parameters: NetworkRequestBodyConvertible, completion: @escaping (Result) -> ()) {
-//        print(parameters)
-//        print(path)
-//        print(HTTPHeaders(headers))
-//        URLCache.shared = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
         AF.request(host + "/\(endpoint.details.pathComponent)", method: method, parameters: parameters.parameters, headers: HTTPHeaders(headers))
             .response { response in
                 if let error = response.error {
@@ -37,7 +33,7 @@ class AlamoNetworking<T: Endpoint> {
             }
     }
     
-    func performAwait(_ method: HTTPMethod, _ endpoint: T, _ parameters: NetworkRequestBodyConvertible) async throws -> Data? {
+    func performAwaitAlamofire(_ method: HTTPMethod, _ endpoint: T, _ parameters: NetworkRequestBodyConvertible) async throws -> Data? {
         return try await withCheckedThrowingContinuation { continuation in
             perform(method, endpoint, parameters) { result in
                 switch result {
@@ -49,6 +45,5 @@ class AlamoNetworking<T: Endpoint> {
             }
         }
     }
-    
 }
 

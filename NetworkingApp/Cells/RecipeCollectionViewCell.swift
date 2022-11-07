@@ -17,7 +17,6 @@ class RecipeCollectionViewCell: UICollectionViewCell {
         DispatchQueue.main.async {
             self.titleLabel.text = recipe.title
             self.imageView.kf.setImage(with: URL(string: recipe.image))
-            
             self.layer.cornerRadius = 12
         }
     }

@@ -8,7 +8,7 @@
 import Foundation
 
 
-// MARK: - .recipes Query
+// MARK: - Recipes
 struct RecipesList: Codable {
     let results: [Result]
 }
@@ -19,12 +19,13 @@ struct Result: Codable {
     let image: String
 }
 
-// MARK: - .random Query
+// MARK: - Random Recipes
 struct RandomRecipesList: Codable {
-    let recipes: [RecipeElement]
+    let recipes: [Recipe]
 }
 
-struct RecipeElement: Codable {
+// MARK: - Recipe
+struct Recipe: Codable {
     let extendedIngredients: [ExtendedIngredient]
     let id: Int
     let title: String
@@ -38,8 +39,8 @@ struct ExtendedIngredient: Codable {
     let name: String
 }
 
-// MARK: - Recipe
-struct Recipe: Codable {
+// MARK: - DishNutrition
+struct DishNutrition: Codable {
     let calories, fat, protein, carbs: Calories
     
     var description: String {

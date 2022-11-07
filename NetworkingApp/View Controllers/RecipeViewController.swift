@@ -19,7 +19,7 @@ class RecipeViewController: UIViewController {
     @IBOutlet private weak var IngredientsCollectionViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var StackViewHeightConstraint: NSLayoutConstraint!
     
-    var recipe: RecipeElement! {
+    var recipe: Recipe! {
         didSet {
             self.IngredientsCollectionView.reloadData()
         }
@@ -39,7 +39,7 @@ class RecipeViewController: UIViewController {
         scrollView.resizeScrollViewContentSize()
     }
     
-    func configure(for recipe: RecipeElement) {
+    func configure(for recipe: Recipe) {
         DispatchQueue.main.async {
             self.recipe = recipe
             self.titleLabel.text = recipe.title
@@ -72,7 +72,6 @@ extension RecipeViewController: UICollectionViewDataSource {
         return cell
     }
 }
-
 
 extension UIScrollView {
     func resizeScrollViewContentSize() {
