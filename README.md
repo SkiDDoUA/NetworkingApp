@@ -9,3 +9,6 @@ Functional:
 * Classify Cuisine
 * Random Recipe
 * Analyze Recipe Instructions
+
+
+CHANGE API KEY BEFORE USAGE!!!
